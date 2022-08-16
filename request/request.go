@@ -2,7 +2,7 @@ package request
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strconv"
 )
@@ -16,11 +16,11 @@ func doReq(req *http.Request) ([]byte, error) {
 		return nil, err
 	}
 	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}
-	if 200 != resp.StatusCode {
+	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("%s", body)
 	}
 	return body, nil
